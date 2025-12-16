@@ -1,6 +1,9 @@
 # Production Dockerfile for Salon Platform API
 FROM node:22-alpine
 
+# Install build dependencies for bcrypt native module
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /app
 
 # Install pnpm
@@ -10,7 +13,7 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml* ./
 
 # Install all dependencies (including dev for ts-node)
-RUN pnpm install || npm install
+RUN pnpm install --unsafe-perm || npm install
 
 # Copy source code
 COPY . .
